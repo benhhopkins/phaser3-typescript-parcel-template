@@ -1,6 +1,17 @@
-import SunVoxLib from './sunvox/lib/sunvox'
+import SunVoxLib from './lib/sunvox'
 
-class SunVox {
+var sv_scope_buf_mptr = null;
+const sv_scope_buf_numsamples = 4096;
+var sv_callback_buf_mptr = null; //output
+var sv_callback_buf2_mptr = null; //input
+var sv_callback_buf_numframes = 0;
+var sv_curve_buf_mptr = null;
+var sv_curve_buf_len = 1024;
+var sv_flags = 0;
+var sv_channels = 0;
+var svlib = SunVoxLib();
+
+class SunVoxLoader {
 	//
 	// SunVox Library (modular synthesizer)
 	// Copyright (c) 2008 - 2020, Alexander Zolotov <nightradio@gmail.com>, WarmPlace.ru
@@ -10,43 +21,45 @@ class SunVox {
 	// Library init
 	//
 
-	sv_scope_buf_mptr = null;
-	public static readonly sv_scope_buf_numsamples = 4096;
-	sv_callback_buf_mptr = null; //output
-	sv_callback_buf2_mptr = null; //input
-	sv_callback_buf_numframes = 0;
-	sv_curve_buf_mptr = null;
-	sv_curve_buf_len = 1024;
-	sv_flags = 0;
-	sv_channels = 0;
-	public svlib = SunVoxLib();
+	// sv_scope_buf_mptr = null;
+	// public static readonly sv_scope_buf_numsamples = 4096;
+	// sv_callback_buf_mptr = null; //output
+	// sv_callback_buf2_mptr = null; //input
+	// sv_callback_buf_numframes = 0;
+	// sv_curve_buf_mptr = null;
+	// sv_curve_buf_len = 1024;
+	// sv_flags = 0;
+	// sv_channels = 0;
+	// public svlib = SunVoxLib();
+
+	public svlib = svlib;
 
 	//
 	// Constants
 	//
 
-	public static readonly NOTECMD_NOTE_OFF = 128;
-	public static readonly NOTECMD_ALL_NOTES_OFF = 129; /* notes of all synths off */
-	public static readonly NOTECMD_CLEAN_SYNTHS = 130; /* stop and clean all synths */
-	public static readonly NOTECMD_STOP = 131;
-	public static readonly NOTECMD_PLAY = 132;
+	NOTECMD_NOTE_OFF = 128;
+	NOTECMD_ALL_NOTES_OFF = 129; /* notes of all synths off */
+	NOTECMD_CLEAN_SYNTHS = 130; /* stop and clean all synths */
+	NOTECMD_STOP = 131;
+	NOTECMD_PLAY = 132;
 
-	public static readonly SV_INIT_FLAG_NO_DEBUG_OUTPUT = (1 << 0);
-	public static readonly SV_INIT_FLAG_USER_AUDIO_CALLBACK = (1 << 1); /* Interaction with sound card is on the user side */
-	public static readonly SV_INIT_FLAG_OFFLINE = (1 << 1); /* Same as SV_INIT_FLAG_USER_AUDIO_CALLBACK */
-	public static readonly SV_INIT_FLAG_AUDIO_INT16 = (1 << 2);
-	public static readonly SV_INIT_FLAG_AUDIO_FLOAT32 = (1 << 3);
-	public static readonly SV_INIT_FLAG_ONE_THREAD = (1 << 4); /* Audio callback and song modification functions are in single thread */
+	SV_INIT_FLAG_NO_DEBUG_OUTPUT = (1 << 0);
+	SV_INIT_FLAG_USER_AUDIO_CALLBACK = (1 << 1); /* Interaction with sound card is on the user side */
+	SV_INIT_FLAG_OFFLINE = (1 << 1); /* Same as SV_INIT_FLAG_USER_AUDIO_CALLBACK */
+	SV_INIT_FLAG_AUDIO_INT16 = (1 << 2);
+	SV_INIT_FLAG_AUDIO_FLOAT32 = (1 << 3);
+	SV_INIT_FLAG_ONE_THREAD = (1 << 4); /* Audio callback and song modification functions are in single thread */
 
-	public static readonly SV_MODULE_FLAG_EXISTS = 1 << 0;
-	public static readonly SV_MODULE_FLAG_EFFECT = 1 << 1;
-	public static readonly SV_MODULE_FLAG_MUTE = 1 << 2;
-	public static readonly SV_MODULE_FLAG_SOLO = 1 << 3;
-	public static readonly SV_MODULE_FLAG_BYPASS = 1 << 4;
-	public static readonly SV_MODULE_INPUTS_OFF = 16;
-	public static readonly SV_MODULE_INPUTS_MASK = (255 << 16); // 16 = SV_MODULE_INPUTS_OFF
-	public static readonly SV_MODULE_OUTPUTS_OFF = (16 + 8);
-	public static readonly SV_MODULE_OUTPUTS_MASK = (255 << 16); // 16 = SV_MODULE_INPUTS_OFF
+	SV_MODULE_FLAG_EXISTS = 1 << 0;
+	SV_MODULE_FLAG_EFFECT = 1 << 1;
+	SV_MODULE_FLAG_MUTE = 1 << 2;
+	SV_MODULE_FLAG_SOLO = 1 << 3;
+	SV_MODULE_FLAG_BYPASS = 1 << 4;
+	SV_MODULE_INPUTS_OFF = 16;
+	SV_MODULE_INPUTS_MASK = (255 << 16); // 16 = SV_MODULE_INPUTS_OFF
+	SV_MODULE_OUTPUTS_OFF = (16 + 8);
+	SV_MODULE_OUTPUTS_MASK = (255 << 16); // 16 = SV_MODULE_INPUTS_OFF
 
 	//
 	// Functions
@@ -289,4 +302,4 @@ class SunVox {
 
 }
 
-export default new SunVox();
+export default new SunVoxLoader();
